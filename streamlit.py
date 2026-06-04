@@ -1,11 +1,13 @@
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+
 st.set_page_config(page_title="Employee Attrition Insights", layout="wide")
 
 st.image("logo.png", width=200)
 st.title("Employee Attrition Dashboard")
 st.caption("A full analysis of employee attrition drivers")
+
 remote   = {"On-site": 52.8, "Remote": 24.7}
 overtime = {"No Overtime": 45.5, "Overtime": 51.5}
 gender   = {"Female": 53.0, "Male": 42.9}
@@ -13,6 +15,37 @@ wlb      = {"Poor": 60.2, "Fair": 57.6, "Good": 40.4, "Excellent": 35.7}
 roles    = {"Education": 48.8, "Healthcare": 47.5, "Technology": 47.1,
             "Finance": 46.9, "Media": 46.8}
 income   = {"Stayed": 7321, "Left": 7275}
+
+st.sidebar.header("Filters")
+
+selected_roles = st.sidebar.multiselect(
+    "Job Role",
+    options=list(roles.keys()),
+    default=list(roles.keys())
+)
+
+selected_gender = st.sidebar.multiselect(
+    "Gender",
+    options=list(gender.keys()),
+    default=list(gender.keys())
+)
+
+selected_wlb = st.sidebar.multiselect(
+    "Work-Life Balance",
+    options=list(wlb.keys()),
+    default=list(wlb.keys())
+)
+
+selected_remote = st.sidebar.multiselect(
+    "Work Type",
+    options=list(remote.keys()),
+    default=list(remote.keys())
+)
+
+filtered_roles   = {k: v for k, v in roles.items() if k in selected_roles}
+filtered_gender  = {k: v for k, v in gender.items() if k in selected_gender}
+filtered_wlb     = {k: v for k, v in wlb.items() if k in selected_wlb}
+filtered_remote  = {k: v for k, v in remote.items() if k in selected_remote}
 
 st.subheader("Overview")
 c1, c2, c3, c4 = st.columns(4)
@@ -29,11 +62,11 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("##### Remote vs On-site")
     fig = px.bar(
-        x=list(remote.keys()),
-        y=list(remote.values()),
-        color=list(remote.keys()),
+        x=list(filtered_remote.keys()),
+        y=list(filtered_remote.values()),
+        color=list(filtered_remote.keys()),
         color_discrete_map={"On-site": "#E24B4A", "Remote": "#639922"},
-        text=[f"{v}%" for v in remote.values()],
+        text=[f"{v}%" for v in filtered_remote.values()],
     )
     fig.update_layout(showlegend=False, yaxis_title="Attrition %",
                       xaxis_title="", yaxis_range=[0, 70])
@@ -63,11 +96,11 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("##### Attrition by Gender")
     fig3 = px.bar(
-        x=list(gender.keys()),
-        y=list(gender.values()),
-        color=list(gender.keys()),
+        x=list(filtered_gender.keys()),
+        y=list(filtered_gender.values()),
+        color=list(filtered_gender.keys()),
         color_discrete_map={"Female": "#D4537E", "Male": "#378ADD"},
-        text=[f"{v}%" for v in gender.values()],
+        text=[f"{v}%" for v in filtered_gender.values()],
     )
     fig3.update_layout(showlegend=False, yaxis_title="Attrition %",
                        xaxis_title="", yaxis_range=[0, 70])
@@ -78,11 +111,12 @@ with col3:
 with col4:
     st.markdown("##### Work-Life Balance")
     fig4 = px.bar(
-        x=list(wlb.keys()),
-        y=list(wlb.values()),
-        color=list(wlb.keys()),
-        color_discrete_sequence=["#E24B4A", "#EF9F27", "#97C459", "#1D9E75"],
-        text=[f"{v}%" for v in wlb.values()],
+        x=list(filtered_wlb.keys()),
+        y=list(filtered_wlb.values()),
+        color=list(filtered_wlb.keys()),
+        color_discrete_map={"Poor": "#E24B4A", "Fair": "#EF9F27",
+                            "Good": "#97C459", "Excellent": "#1D9E75"},
+        text=[f"{v}%" for v in filtered_wlb.values()],
     )
     fig4.update_layout(showlegend=False, yaxis_title="Attrition %",
                        xaxis_title="", yaxis_range=[0, 75])
@@ -126,12 +160,12 @@ st.divider()
 
 st.subheader("Attrition by Job Role")
 fig7 = px.bar(
-    x=list(roles.values()),
-    y=list(roles.keys()),
+    x=list(filtered_roles.values()),
+    y=list(filtered_roles.keys()),
     orientation="h",
-    color=list(roles.values()),
+    color=list(filtered_roles.values()),
     color_continuous_scale=["#639922", "#EF9F27", "#E24B4A"],
-    text=[f"{v}%" for v in roles.values()],
+    text=[f"{v}%" for v in filtered_roles.values()],
 )
 fig7.update_layout(showlegend=False, xaxis_title="Attrition %",
                    yaxis_title="", coloraxis_showscale=False)
