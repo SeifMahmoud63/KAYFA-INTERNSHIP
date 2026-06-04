@@ -1,12 +1,11 @@
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
-
 st.set_page_config(page_title="Employee Attrition Insights", layout="wide")
 
+st.image("logo.png", width=200)
 st.title("Employee Attrition Dashboard")
 st.caption("A full analysis of employee attrition drivers")
-
 remote   = {"On-site": 52.8, "Remote": 24.7}
 overtime = {"No Overtime": 45.5, "Overtime": 51.5}
 gender   = {"Female": 53.0, "Male": 42.9}
