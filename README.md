@@ -4,7 +4,7 @@ A Streamlit dashboard analyzing employee attrition drivers across 74,498 employe
 
 ## Live Demo
 
-[View on Streamlit Community Cloud](https://share.streamlit.io)
+[View on Streamlit Community Cloud](https://kayfa-internship-tv8yi8gz2tgybmkntbyew3.streamlit.app/)
 
 ## Key Insights
 
